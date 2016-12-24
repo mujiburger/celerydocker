@@ -1,0 +1,38 @@
+version: '2'
+services:
+  rabbitmq:
+    image: jbanetwork/rabbitmq
+    restart: on-failure
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=rb_erlang_cookie_changeme
+      - RABBITMQ_DEFAULT_USER=rb_user
+      - RABBITMQ_DEFAULT_PASS=rb_password
+      - RABBITMQ_NODENAME=rabbit@rabbitmq
+      - RABBITMQ_IP=0.0.0.0
+      - RABBITMQ_PORT=5672
+    networks:
+      - net
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+  redis:
+    image: redis:alpine
+    networks:
+      - net
+    ports:
+      - "6379:6379"
+  job1:
+    image: celerydocker/job1
+    networks:
+      - net
+  job2:
+    image: celerydocker/job2
+    networks:
+      - net
+  job3:
+    image: celerydocker/job3
+    networks:
+      - net
+networks:
+  net:
+    driver: bridge
